@@ -1,0 +1,22 @@
+For this task, I created web service application that connects bundesbank services and get data.
+Application has language support.
+It can be used as BackUp Service for bundesbank as saving data to database.
+In this task, this is not required, so I just created entities and repositories for future development.
+All data in services are in same format as entities, so it will be quite easy to save.
+Purpose of this application is get recent data from service, so using database is not covering changes. But using daily cron job or scheduled task can solve this problem
+Unit tests are written and covering exceptions.
+There are 3 endpoints:
+1 : /api/currencies : Get all currencies published in bundesbank. Returns list of code - common name pairs.
+                      ISO codes must be 3 digits, so only 3 digits considered as code.
+                      If there is a problem with bank service or format, it returns HTTP:NOT_ACCEPTABLE : 406
+
+2 : /api/getRates : Gets 3 parameters and returns daily exchange rates between given dates.
+                    Currency parameter is required,but startPeriod and endPeriod can be blank.
+                    If startPeriod is blank, dataset starts from oldest data
+                    If endPeriod is blank, dataset ends to lastest data
+                    If both are blank, service returns all available data.
+                    If data is not found(Currency cannot be found - service is not available), it returns HTTP:NOT_ACCEPTABLE : 406
+
+3 : /api/convertRate Gets 3 parameter and returns converted amount.
+                     All parameters are required, 1 : Currency, 2 : date, 3 : amount to be converted
+                     If exchange rate can not be found, then returns HTTP:NOT_ACCEPTABLE : 406
